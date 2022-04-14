@@ -118,7 +118,10 @@ int8_t TMCSerial::readRegister(uint8_t address, uint32_t &registerValue)
     readRequest[3] = calcCRC(readRequest, 3);
 
     /* Clear receive buffer in case anything is leftover from previous operations. */
-    _serialPort.clear();
+    // _serialPort.clear();
+    while (_serialPort.available()) {
+        _serialPort.read();
+    }
 
     /* Sending read access datagram */
     for (uint8_t j = 0; j < 4; j++)
